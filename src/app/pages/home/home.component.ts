@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, inject} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Router} from "@angular/router";
+import {RoutesMap} from "../../core/utils/route.utilities";
 
 @Component({
   selector: 'app-home',
@@ -9,5 +11,12 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
+  private router: Router = inject(Router)
 
+  /**
+   * Method to navigate to the movie list
+   * */
+ protected navigateToMovieList() {
+    this.router.navigate([RoutesMap.MOVIE_LIST.path]);
+  }
 }
