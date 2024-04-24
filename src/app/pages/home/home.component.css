@@ -1,0 +1,8 @@
+/*Navigation label*/
+.navigation-link {
+  width: fit-content;
+}
+
+.navigation-link:hover {
+  cursor: pointer;
+}
