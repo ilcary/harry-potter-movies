@@ -12,4 +12,8 @@ export class RoutesMap {
     name: 'movie-list',
     path: 'movie-list',
   };
+  public static MOVIE_LIST_DETAIL: RoutesMap = {
+    name: 'movieId',
+    path: ':movieId',
+  };
   }
