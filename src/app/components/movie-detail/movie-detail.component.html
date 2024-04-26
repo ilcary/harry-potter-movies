@@ -1,0 +1,55 @@
+<div class="container">
+  <ng-container *ngIf="movieDetail$ | async as movieDetail">
+    <!--Go to moviel list btn-->
+    <button type="button" [routerLink]="'/'.concat(RoutesMap.MOVIE_LIST.path)" class="btn btn-primary">Back to the list
+      <i
+        class="bi bi-card-list"></i>
+    </button>
+
+    <!--Movie detail info-->
+    <div class="text-center">
+      <h1>{{movieDetail.title}}</h1>
+    </div>
+    <div class="container">
+      <div class="d-flex">
+        <img class="card-img-top"
+             [src]="movieDetail.poster"
+             alt="Movie poster">
+        <div class="card-body">
+          <p class="summary"><span class="fw-bold">Summary: </span>
+            {{movieDetail.summary}}
+          </p>
+        </div>
+      </div>
+      <div class="container movie-info">
+        <div class="row">
+          <div class="col-4"><span class="fw-bold">Box office</span></div>
+          <div class="col-8"><span>{{movieDetail.box_office| boxOffice}}</span></div>
+        </div>
+        <div class="row">
+          <div class="col-4"><span class="fw-bold">Budget</span></div>
+          <div class="col-8"><span>${{movieDetail.budget}} million</span></div>
+        </div>
+        <div class="row">
+          <div class="col-4"><span class="fw-bold">Duration</span></div>
+          <div class="col-8"><span>{{movieDetail.duration | durationMinutesInHours}}</span></div>
+        </div>
+        <div class="row">
+          <div class="col-4"><span class="fw-bold">Producers</span></div>
+          <div class="col-8">
+            <ng-container *ngFor="let producer of movieDetail.producers; last as last">
+              <span>{{producer.concat(last ? '' : ',&nbsp;')}}</span></ng-container>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4"><span class="fw-bold">Cinematographers</span></div>
+          <div class="col-8">
+            <ng-container *ngFor="let cinematographer of movieDetail.cinematographers; last as last">
+              <span>{{cinematographer.concat(last ? '' : ',&nbsp;')}}</span></ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>

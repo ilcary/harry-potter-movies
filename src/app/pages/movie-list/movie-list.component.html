@@ -1,0 +1,75 @@
+<!--Movie list section-->
+<div class="px-4 py-5 my-5 text-center">
+  <button type="button" [routerLink]="'/'.concat(RoutesMap.HOME.path)" class="btn btn-primary">Back to the Home <i class="bi bi-house"></i></button>
+
+    <!--Title-->
+  <h1 class="display-5 fw-bold text-body-emphasis">Harry Potter's films</h1>
+  <div class="col-lg-6 mx-auto">
+    <!--Movie content-->
+    <ng-container *ngIf="!!route?.firstChild; else movieList">
+      <!--Subtitle-->
+      <p class="lead mb-4">See Harry Potter's film detail:</p>
+      <!--Movie detail rendered by children routing-->
+      <router-outlet></router-outlet>
+    </ng-container>
+
+  </div>
+</div>
+
+<!--Templates-->
+
+<!--Movie list-->
+<ng-template #movieList>
+  <ng-container *ngIf="(movieListFiltered$ | async) as movieList">
+    <!--Subtitle-->
+    <p class="lead mb-4">See all Harry Potter's films:</p>
+
+    <!--Movie filters-->
+    <div class="filters">
+      <form [formGroup]="formFilters">
+        <!--Title-->
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Title</span>
+          </div>
+          <input formControlName="title" type="text" class="form-control">
+        </div>
+        <!--Release date-->
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Release year</span>
+          </div>
+          <input formControlName="releaseYear" type="number" class="form-control">
+        </div>
+      </form>
+    </div>
+
+    <table class="table">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Release Date</th>
+        <th scope="col">Budget</th>
+        <th scope="col">Duration</th>
+        <th scope="col">-</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <ng-container *ngFor="let movie of movieList; index as i; trackBy: trackByMovieId">
+        <tr>
+          <th scope="row">{{i + 1}}</th>
+          <td>{{movie.title}}</td>
+          <td>{{movie.release_date}}</td>
+          <td>${{movie.budget}} million</td>
+          <td>{{movie.duration | durationMinutesInHours}}</td>
+          <td><a class="fw-bold navigation-link" [routerLink]="movie.id"> Details <i class="bi bi-card-text"></i>
+          </a></td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+  </ng-container>
+</ng-template>
+
