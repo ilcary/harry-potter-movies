@@ -1,5 +1,5 @@
 import {Component, inject, TrackByFunction} from '@angular/core';
-import {distinctUntilChanged, filter, map, Observable, startWith, withLatestFrom} from "rxjs";
+import {debounceTime, distinctUntilChanged, filter, map, Observable, startWith, withLatestFrom} from "rxjs";
 import {MovieMinimalDTO} from "../../core/models/movies.model";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, RouterLink, RouterOutlet} from "@angular/router";
@@ -24,7 +24,6 @@ export class MovieListComponent {
   protected fb: FormBuilder = inject(FormBuilder)
   private movieList$: Observable<MovieMinimalDTO[]> = this.route.data.pipe(map(({movieList}) => movieList));
   protected movieListFiltered$: Observable<MovieMinimalDTO[]> = this.route.data.pipe(map(({movieList}) => movieList));
-  protected isDetailSelected$: Observable<boolean> | undefined = this.route.firstChild?.paramMap.pipe(map((params) => !!params.get('movieId')))
   protected trackByMovieId: TrackByFunction<MovieMinimalDTO> = (index, movie) => movie.id;
 
   protected formFilters: FormFilters;
@@ -38,9 +37,6 @@ export class MovieListComponent {
     })
     //manage the filtering of the movie list
     this.movieListFiltered$ = this.getMovieListFiltered$()
-    // Subscribe to changes in the route parameters
-    this.isDetailSelected$?.subscribe();
-
   }
 
   /**
@@ -48,7 +44,7 @@ export class MovieListComponent {
    * @returns An Observable emitting an array of MovieMinimalDTO objects representing the filtered movie list.
    */
   private getMovieListFiltered$(): Observable<MovieMinimalDTO[]> {
-    return this.formFilters.valueChanges.pipe(distinctUntilChanged(), startWith({
+    return this.formFilters.valueChanges.pipe(distinctUntilChanged(),debounceTime(400), startWith({
       title: '',
       releaseYear: ''
     }), withLatestFrom(this.movieList$), map(([{
